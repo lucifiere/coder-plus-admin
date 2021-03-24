@@ -4,7 +4,7 @@ import cn.hutool.core.util.StrUtil;
 import com.google.common.base.Joiner;
 import com.google.common.base.Preconditions;
 import com.lucifiere.coderplus.container.ManagedBean;
-import com.lucifiere.coderplus.io.NioTextFileAccessor;
+import com.lucifiere.coderplus.io.FileAccessor;
 import com.lucifiere.coderplus.model.Model;
 
 import java.util.Optional;
@@ -22,7 +22,7 @@ public class SourceCodeExtractor extends CustomizedAttrExtractor {
     public Model extract() {
         String ddlStr;
         if (globalContext.getConfig().getDriveCode() == null) {
-            ddlStr = NioTextFileAccessor.loadFile(Joiner.on("/").join(globalContext.getConfig().getWorkspacePath(), globalContext.getConfig().getInputFileName()));
+            ddlStr = FileAccessor.loadFile(Joiner.on("/").join(globalContext.getConfig().getWorkspacePath(), globalContext.getConfig().getInputFileName()));
         } else {
             ddlStr = globalContext.getConfig().getDriveCode();
         }

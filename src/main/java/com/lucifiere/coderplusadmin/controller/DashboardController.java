@@ -6,7 +6,7 @@ import com.google.common.collect.Lists;
 import com.lucifiere.coderplus.bootstrap.Bootstrap;
 import com.lucifiere.coderplus.bootstrap.IdlBasedCodeGenerator;
 import com.lucifiere.coderplus.bootstrap.SqlBasedCodeGenerator;
-import com.lucifiere.coderplus.io.NioTextFileAccessor;
+import com.lucifiere.coderplus.io.FileAccessor;
 import com.lucifiere.coderplus.render.View;
 import com.lucifiere.coderplus.render.views.SourceCodeView;
 import com.lucifiere.coderplus.templates.embed.EmbedTemplates;
@@ -61,7 +61,7 @@ public class DashboardController {
                     EmbedTemplates.SER_IMPL_REPOSITORY,
                     EmbedTemplates.MYBATIS_XML_MAPPER,
                     EmbedTemplates.MYBATIS_MAPPER));
-            Resource resource = NioTextFileAccessor.loadFileResource("");
+            Resource resource = FileAccessor.loadFileResource("");
             String contentType = request.getServletContext().getMimeType(resource.getFile().getAbsolutePath());
             if (contentType == null) {
                 contentType = "application/octet-stream";

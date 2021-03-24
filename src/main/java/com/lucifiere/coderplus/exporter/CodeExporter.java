@@ -2,11 +2,12 @@ package com.lucifiere.coderplus.exporter;
 
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.util.StrUtil;
+import cn.hutool.core.util.ZipUtil;
 import com.google.common.base.Preconditions;
 import com.lucifiere.coderplus.common.FileSetting;
 import com.lucifiere.coderplus.common.FileType;
 import com.lucifiere.coderplus.container.ManagedBean;
-import com.lucifiere.coderplus.io.NioTextFileAccessor;
+import com.lucifiere.coderplus.io.FileAccessor;
 import com.lucifiere.coderplus.render.View;
 import com.lucifiere.coderplus.render.views.SourceCodeView;
 import com.lucifiere.coderplus.utils.CodeStyle;
@@ -41,8 +42,9 @@ public class CodeExporter extends AbstractExporter {
                     FileUtil.mkdir(FileUtil.newFile(getOutputPath() + view.getFileSetting().getFileDir()));
                 }
             }
-            NioTextFileAccessor.createFile(view.getContent(), outPath, createFilePath(view));
+            FileAccessor.createFile(view.getContent(), outPath, createFilePath(view));
         }));
+        ZipUtil.zip(outPath);
     }
 
     private void checkViewType(List<View> views) {

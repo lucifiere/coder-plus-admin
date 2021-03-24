@@ -1,6 +1,6 @@
 package com.lucifiere.coderplus.render.freemarker;
 
-import com.lucifiere.coderplus.io.NioTextFileAccessor;
+import com.lucifiere.coderplus.io.FileAccessor;
 import com.lucifiere.coderplus.templates.spec.TemplateSpec;
 import com.lucifiere.coderplus.utils.GlobalContextHolder;
 import freemarker.cache.StringTemplateLoader;
@@ -42,7 +42,7 @@ public class FreemarkerTemplateManager extends StringTemplateLoader {
     public void initStringTemplateLoader() {
         Set<TemplateSpec> allSpec = GlobalContextHolder.globalContext.getAllTemplates();
         allSpec.forEach(spec -> {
-            String content = NioTextFileAccessor.loadEmbedFile(spec.getPath());
+            String content = FileAccessor.loadEmbedFile(spec.getPath());
             super.putTemplate(spec.getId(), content);
         });
     }

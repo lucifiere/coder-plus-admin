@@ -23,7 +23,7 @@ import java.util.jar.JarFile;
  * @author created by XD.Wang
  * Date 2020/7/12.
  */
-final public class NioTextFileAccessor {
+final public class FileAccessor {
 
     public static String loadFile(String pathStr) {
         try {
@@ -51,7 +51,7 @@ final public class NioTextFileAccessor {
 
     public static String loadEmbedFile(String fileName) {
         try {
-            URL url = NioTextFileAccessor.class.getClassLoader().getResource(fileName.startsWith("/") ? fileName.substring(1) : fileName);
+            URL url = FileAccessor.class.getClassLoader().getResource(fileName.startsWith("/") ? fileName.substring(1) : fileName);
             if (url == null) {
                 throw new RuntimeException("embed file not found!" + fileName);
             }

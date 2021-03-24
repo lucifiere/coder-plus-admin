@@ -6,6 +6,7 @@ import com.lucifiere.coderplus.container.ManagedBean;
 import com.lucifiere.coderplus.render.View;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * @author created by XD.Wang
@@ -24,7 +25,7 @@ public abstract class AbstractExporter implements Exporter, GlobalContextAware {
 
     @Override
     public String getOutputPath() {
-        return context.getConfig().getWorkspacePath() + "/" + context.getConfig().getOutputDir();
+        return context.getConfig().getWorkspacePath() + "/" + Optional.ofNullable(context.getConfig().getOutputDir()).orElse("");
     }
 
     @Override
