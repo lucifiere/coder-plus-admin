@@ -6,15 +6,21 @@ import com.google.common.collect.Lists;
 import com.lucifiere.coderplus.bootstrap.Bootstrap;
 import com.lucifiere.coderplus.bootstrap.IdlBasedCodeGenerator;
 import com.lucifiere.coderplus.bootstrap.SqlBasedCodeGenerator;
+import com.lucifiere.coderplus.io.NioTextFileAccessor;
 import com.lucifiere.coderplus.render.View;
 import com.lucifiere.coderplus.render.views.SourceCodeView;
 import com.lucifiere.coderplus.templates.embed.EmbedTemplates;
 import com.lucifiere.coderplusadmin.domain.CodeGenerateRequest;
 import com.lucifiere.coderplusadmin.domain.CodeGenerateResponse;
 import com.lucifiere.coderplusadmin.module.CodeGenerateNodeSetting;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Objects;
 
@@ -44,20 +50,49 @@ public class DashboardController {
         return m;
     }
 
-    @PostMapping("generate")
-    public CodeGenerateResponse generateCode(@RequestBody CodeGenerateRequest request) {
+    @GetMapping("download")
+    public ResponseEntity<Resource> downloadFile(@RequestBody CodeGenerateRequest setting, HttpServletRequest request) {
         try {
-            Preconditions.checkArgument(StrUtil.isNotBlank(request.getAuthor()), "请输入代码作者~");
-            Preconditions.checkArgument(StrUtil.isNotBlank(request.getDriveCode()), "请输入驱动语句~");
-            Bootstrap bootstrap = null;
-            if (Objects.equals(request.getNodeType(), CodeGenerateNodeSetting.DDL.name())) {
-                bootstrap = new SqlBasedCodeGenerator().setDriveCode(request.getDriveCode()).setPkg(request.getPkg()).setAuthor(request.getAuthor());
+            Bootstrap bootstrap = createBootstrap(setting);
+            bootstrap.execute(Lists.newArrayList(EmbedTemplates.BIZ_POJO,
+                    EmbedTemplates.MODEL,
+                    EmbedTemplates.EXAMPLE,
+                    EmbedTemplates.SER_REPOSITORY,
+                    EmbedTemplates.SER_IMPL_REPOSITORY,
+                    EmbedTemplates.MYBATIS_XML_MAPPER,
+                    EmbedTemplates.MYBATIS_MAPPER));
+            Resource resource = NioTextFileAccessor.loadFileResource("");
+            String contentType = request.getServletContext().getMimeType(resource.getFile().getAbsolutePath());
+            if (contentType == null) {
+                contentType = "application/octet-stream";
             }
-            if (Objects.equals(request.getNodeType(), CodeGenerateNodeSetting.IDL.name())) {
-                bootstrap = new IdlBasedCodeGenerator().setDriveCode(request.getDriveCode()).setPkg(request.getPkg()).setAuthor(request.getAuthor());
-                ;
-            }
-            Preconditions.checkArgument(bootstrap != null, "执行失败！");
+            return ResponseEntity.ok()
+                    .contentType(MediaType.parseMediaType(contentType))
+                    .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"")
+                    .body(resource);
+        } catch (Exception e) {
+            throw new RuntimeException("下载失败！" + e.getMessage());
+        }
+    }
+
+    private Bootstrap createBootstrap(CodeGenerateRequest setting) {
+        Preconditions.checkArgument(StrUtil.isNotBlank(setting.getAuthor()), "请输入代码作者~");
+        Preconditions.checkArgument(StrUtil.isNotBlank(setting.getDriveCode()), "请输入驱动语句~");
+        Bootstrap bootstrap = null;
+        if (Objects.equals(setting.getNodeType(), CodeGenerateNodeSetting.DDL.name())) {
+            bootstrap = new SqlBasedCodeGenerator().setDriveCode(setting.getDriveCode()).setPkg(setting.getPkg()).setAuthor(setting.getAuthor());
+        }
+        if (Objects.equals(setting.getNodeType(), CodeGenerateNodeSetting.IDL.name())) {
+            bootstrap = new IdlBasedCodeGenerator().setDriveCode(setting.getDriveCode()).setPkg(setting.getPkg()).setAuthor(setting.getAuthor());
+        }
+        Preconditions.checkArgument(bootstrap != null, "执行失败！");
+        return bootstrap;
+    }
+
+    @PostMapping("generate")
+    public CodeGenerateResponse generateCode(@RequestBody CodeGenerateRequest setting) {
+        try {
+            Bootstrap bootstrap = createBootstrap(setting);
             List<View> views = bootstrap.renderingViews(Lists.newArrayList(EmbedTemplates.BIZ_POJO,
                     EmbedTemplates.MODEL,
                     EmbedTemplates.EXAMPLE,

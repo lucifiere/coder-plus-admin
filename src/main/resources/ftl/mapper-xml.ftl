@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 
-<mapper namespace="${_base_pk}.mapper.${_m_cf}Mapper">
+<!-- Author：${_au} -->
+<mapper namespace="${_base_pk}.${_m_cf}Mapper">
 
-    <resultMap id="BaseResultMap" type="${_m_cf}">
+    <resultMap id="BaseResultMap" type="${_base_pk}.${_m_cf}">
         <#list _f as filed>
             <!-- 字段含义：${filed._f_comment} -->
             <id column="${filed._f_u}" property="${filed._f_c}" jdbcType="${filed._f_jdbct}"/>
@@ -52,7 +53,7 @@
     </sql>
 
     <select id="select${_m_cf}ListByExample" resultMap="BaseResultMap"
-            parameterType="${_base_pk}.example.${_m_cf}Example">
+            parameterType="${_base_pk}.${_m_cf}Example">
         select
         <if test="distinct">
             distinct
@@ -77,7 +78,7 @@
         ${_pk._f_u} = ${r'#{'}${_pk._f_c},jdbcType=${_pk._f_jdbct}}
     </select>
 
-    <select id="select${_m_cf}ListByParam" resultMap="BaseResultMap" parameterType="${_m_cf}">
+    <select id="select${_m_cf}ListByParam" resultMap="BaseResultMap" parameterType="${_base_pk}.${_m_cf}">
         select
         <include refid="Base_Column_List"/>
         from
@@ -97,7 +98,7 @@
         where ${_pk._f_u} = ${r'#{'}${_pk._f_c},jdbcType=${_pk._f_jdbct}}
     </delete>
 
-    <update id="update${_m_cf}ById" parameterType="${_m_cf}">
+    <update id="update${_m_cf}ById" parameterType="${_base_pk}.${_m_cf}">
         update
         <include refid="Table_Name"/>
         <set>
@@ -110,7 +111,7 @@
         where ${_pk._f_u} = ${r'#{'}${_pk._f_c},jdbcType=${_pk._f_jdbct}}
     </update>
 
-    <insert id="insert${_m_cf}" parameterType="${_m_cf}" useGeneratedKeys="true" keyProperty="id">
+    <insert id="insert${_m_cf}" parameterType="${_base_pk}.${_m_cf}" useGeneratedKeys="true" keyProperty="id">
         insert into
         <include refid="Table_Name"/>
         <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -129,7 +130,7 @@
         </trim>
     </insert>
 
-    <insert id="batchInsert${_m_cf}" parameterType="${_m_cf}">
+    <insert id="batchInsert${_m_cf}" parameterType="${_base_pk}.${_m_cf}">
         insert into
         <include refid="Table_Name"/>
         <trim prefix="(" suffix=")" suffixOverrides=",">

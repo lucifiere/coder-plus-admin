@@ -5,6 +5,8 @@ import cn.hutool.core.io.IoUtil;
 import cn.hutool.core.util.URLUtil;
 import cn.hutool.log.StaticLog;
 import com.google.common.base.Charsets;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -27,6 +29,20 @@ final public class NioTextFileAccessor {
         try {
             Path path = Paths.get(pathStr);
             return String.join("\n", Files.readAllLines(path));
+        } catch (IOException e) {
+            StaticLog.error("external file load failed！", e);
+            throw ExceptionUtil.wrapRuntime(e);
+        }
+    }
+
+    public static Resource loadFileResource(String pathStr) {
+        try {
+            Path path = Paths.get(pathStr);
+            UrlResource resource = new UrlResource(path.toUri());
+            if (resource.exists()) {
+                return resource;
+            }
+            throw ExceptionUtil.wrapRuntime("未找到文件！");
         } catch (IOException e) {
             StaticLog.error("external file load failed！", e);
             throw ExceptionUtil.wrapRuntime(e);
