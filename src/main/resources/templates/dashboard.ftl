@@ -317,11 +317,8 @@
             type: "post",
             async: false,
             data: JSON.stringify(req),
-            success: function (obj) {
-                console.log(obj.msg)
-                if (!obj.suc) {
-                    alert(obj.msg)
-                }
+            success: function () {
+
             }
         })
     }
