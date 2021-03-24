@@ -50,9 +50,10 @@ public class DashboardController {
         return m;
     }
 
-    @GetMapping("download")
+    @PostMapping("download")
     public ResponseEntity<Resource> downloadFile(@RequestBody CodeGenerateRequest setting, HttpServletRequest request) {
         try {
+            Preconditions.checkArgument(StrUtil.isNotBlank(setting.getWorkspacePath()), "请输入代码文件路径~");
             Bootstrap bootstrap = createBootstrap(setting);
             bootstrap.execute(Lists.newArrayList(EmbedTemplates.BIZ_POJO,
                     EmbedTemplates.MODEL,
@@ -61,7 +62,7 @@ public class DashboardController {
                     EmbedTemplates.SER_IMPL_REPOSITORY,
                     EmbedTemplates.MYBATIS_XML_MAPPER,
                     EmbedTemplates.MYBATIS_MAPPER));
-            Resource resource = FileAccessor.loadFileResource("");
+            Resource resource = FileAccessor.loadFileResource(setting.getWorkspacePath() + "/" + "output.zip");
             String contentType = request.getServletContext().getMimeType(resource.getFile().getAbsolutePath());
             if (contentType == null) {
                 contentType = "application/octet-stream";
@@ -80,10 +81,10 @@ public class DashboardController {
         Preconditions.checkArgument(StrUtil.isNotBlank(setting.getDriveCode()), "请输入驱动语句~");
         Bootstrap bootstrap = null;
         if (Objects.equals(setting.getNodeType(), CodeGenerateNodeSetting.DDL.name())) {
-            bootstrap = new SqlBasedCodeGenerator().setDriveCode(setting.getDriveCode()).setPkg(setting.getPkg()).setAuthor(setting.getAuthor());
+            bootstrap = new SqlBasedCodeGenerator().setDriveCode(setting.getDriveCode()).setOutputDir("output").setPkg(setting.getPkg()).setWorkspacePath(setting.getWorkspacePath()).setAuthor(setting.getAuthor());
         }
         if (Objects.equals(setting.getNodeType(), CodeGenerateNodeSetting.IDL.name())) {
-            bootstrap = new IdlBasedCodeGenerator().setDriveCode(setting.getDriveCode()).setPkg(setting.getPkg()).setAuthor(setting.getAuthor());
+            bootstrap = new IdlBasedCodeGenerator().setDriveCode(setting.getDriveCode()).setOutputDir("output").setPkg(setting.getPkg()).setWorkspacePath(setting.getWorkspacePath()).setAuthor(setting.getAuthor());
         }
         Preconditions.checkArgument(bootstrap != null, "执行失败！");
         return bootstrap;

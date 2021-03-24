@@ -98,7 +98,7 @@ public class GlobalContext {
             this.config = config;
             registerComponents();
             registerTemplates();
-//            registerGroups();
+            registerGroups();
             processGlobalContextAware();
             this.isInit.compareAndSet(false, true);
         } catch (Exception e) {

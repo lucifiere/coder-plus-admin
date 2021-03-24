@@ -10,50 +10,7 @@ import com.lucifiere.coderplus.resovler.antlr.AntlrThriftResolver;
  *
  * @author XD.Wang
  */
-public class IdlBasedCodeGenerator extends Bootstrap {
-
-    protected final GlobalConfig config = new GlobalConfig();
-
-    public IdlBasedCodeGenerator setWorkspacePath(String workspacePath) {
-        config.setWorkspacePath(workspacePath);
-        return this;
-    }
-
-    public IdlBasedCodeGenerator setOutputDir(String outputPath) {
-        config.setOutputDir(outputPath);
-        return this;
-    }
-
-
-    public IdlBasedCodeGenerator setAuthor(String author) {
-        config.setAuthor(author);
-        return this;
-    }
-
-    public IdlBasedCodeGenerator setPkg(String pkg) {
-        config.setBasePkg(pkg);
-        return this;
-    }
-
-    public IdlBasedCodeGenerator setDriveCode(String code) {
-        config.setDriveCode(code);
-        return this;
-    }
-
-    public IdlBasedCodeGenerator setIdlName(String idlName) {
-        config.setInputFileName(idlName);
-        return this;
-    }
-
-    public IdlBasedCodeGenerator setTemplatesPath(String templatesPath) {
-        config.setTemplatesConfigScanPath(templatesPath);
-        return this;
-    }
-
-    public IdlBasedCodeGenerator setRemovePrefixIfExist(String removePrefixIfExist) {
-        config.setRemovePrefixIfExist(removePrefixIfExist);
-        return this;
-    }
+public class IdlBasedCodeGenerator extends ConfigurableBootstrap {
 
     @Override
     protected GlobalConfig configureContext() {

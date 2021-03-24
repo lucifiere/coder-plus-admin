@@ -176,6 +176,14 @@
                                     </div>
                                 </div>
                                 <div class="form-group">
+                                    <label for="biz-input" class="col-md-12">代码文件路径</label>
+                                    <div class="col-md-12">
+                                        <input type="text" value="/Users/wangxiandui/Documents/gen-codes"
+                                               class="form-control form-control-line" name="workspace-path"
+                                               id="workspaceTxt">
+                                    </div>
+                                </div>
+                                <div class="form-group">
                                     <label class="col-sm-12">目标语言</label>
                                     <div class="col-sm-12">
                                         <select class="form-control form-control-line">
@@ -192,7 +200,8 @@
                                 </div>
                                 <div class="form-group">
                                     <div class="col-sm-12">
-                                        <button class="btn btn-success" type="button" onclick="generate()">生成代码！</button>
+                                        <button class="btn btn-success" type="button" onclick="generate()">生成代码</button>
+                                        <button class="btn btn-warning" type="button" onclick="download()">下载代码</button>
                                     </div>
                                 </div>
                             </form>
@@ -208,7 +217,7 @@
                                 <div class="form-group">
                                     <label class="col-md-12"><b>实体类</b></label>
                                     <div class="col-md-12">
-                                        <textarea  rows="10" id="model"
+                                        <textarea rows="10" id="model"
                                                   class="form-control form-control-line"></textarea>
                                     </div>
                                 </div>
@@ -287,6 +296,30 @@
                     $("#xml").text(obj.xml);
                     $("#example").text(obj.example);
                 } else {
+                    alert(obj.msg)
+                }
+            }
+        })
+    }
+
+    function download() {
+        const req = {
+            "driveCode": $("#driveCodeTxt").val(),
+            "nodeType": $("#nodeType").val(),
+            "author": $("#authorTxt").val(),
+            "pkg": $("#pkgTxt").val(),
+            "workspacePath": $("#workspaceTxt").val(),
+            "customizedModelName": $("#customizedModelName").val(),
+        }
+        $.ajax({
+            contentType: "application/json",
+            url: "/dashboard/download",
+            type: "post",
+            async: false,
+            data: JSON.stringify(req),
+            success: function (obj) {
+                console.log(obj.msg)
+                if (!obj.suc) {
                     alert(obj.msg)
                 }
             }

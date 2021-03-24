@@ -14,7 +14,7 @@ public class Main {
      */
     public static void main(String[] args) {
         SqlBasedCodeGenerator ddlCodeGenerator1 = new SqlBasedCodeGenerator();
-        ddlCodeGenerator1.setDdlName("ddl.sql").setOutputDir("output").setWorkspacePath("/Users/wangxiandui/Documents/gen-codes");
+        ddlCodeGenerator1.setInputFileName("ddl.sql").setOutputDir("output").setWorkspacePath("/Users/wangxiandui/Documents/gen-codes");
         ddlCodeGenerator1.execute(
                 EmbedTemplates.BIZ_POJO,
                 EmbedTemplates.MODEL,

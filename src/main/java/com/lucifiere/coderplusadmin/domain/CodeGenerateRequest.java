@@ -8,6 +8,8 @@ package com.lucifiere.coderplusadmin.domain;
  */
 public class CodeGenerateRequest {
 
+    private String workspacePath;
+
     private String driveCode;
 
     private String nodeType;
@@ -56,5 +58,14 @@ public class CodeGenerateRequest {
 
     public void setNodeType(String nodeType) {
         this.nodeType = nodeType;
+    }
+
+    public String getWorkspacePath() {
+        return workspacePath;
+    }
+
+    public CodeGenerateRequest setWorkspacePath(String workspacePath) {
+        this.workspacePath = workspacePath;
+        return this;
     }
 }

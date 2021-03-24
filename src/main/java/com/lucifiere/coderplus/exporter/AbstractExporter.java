@@ -2,7 +2,6 @@ package com.lucifiere.coderplus.exporter;
 
 import com.lucifiere.coderplus.container.GlobalContext;
 import com.lucifiere.coderplus.container.GlobalContextAware;
-import com.lucifiere.coderplus.container.ManagedBean;
 import com.lucifiere.coderplus.render.View;
 
 import java.util.List;
