@@ -1,6 +1,7 @@
 package com.lucifiere.coderplus.model;
 
 import cn.hutool.core.convert.Convert;
+import cn.hutool.core.util.StrUtil;
 import com.lucifiere.coderplus.model.enums.ModelBuiltInAttr;
 import com.lucifiere.coderplus.model.meta.Field;
 import com.lucifiere.coderplus.utils.CodeStyle;
@@ -88,7 +89,7 @@ public class Model {
     }
 
     public boolean isEmpty() {
-        return false;
+        return  StrUtil.isBlank(keyword);
     }
 
 }

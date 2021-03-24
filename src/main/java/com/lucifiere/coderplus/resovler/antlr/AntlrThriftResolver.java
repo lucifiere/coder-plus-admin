@@ -100,6 +100,9 @@ public class AntlrThriftResolver extends ThriftBaseListener implements Resolver 
         ThriftModel model = new ThriftModel();
         this.setThriftModel(model);
         walker.walk(this, ctDdlTree);
+        if (model.isEmpty()) {
+            throw new RuntimeException("IDL解析失败，请检查结构体语句");
+        }
         return model;
     }
 
