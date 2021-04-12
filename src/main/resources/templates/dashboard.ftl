@@ -154,16 +154,16 @@
                                 <div class="form-group">
                                     <label class="col-md-12" for="author">代码作者（必填）</label>
                                     <div class="col-md-12">
-                                        <input type="text" placeholder="XD.Wang" id="authorTxt" name="author"
-                                               class="form-control form-control-line">
+                                        <input type="text" placeholder="示例：XD.Wang" id="authorTxt" name="author"
+                                               class="form-control form-control-line" style="color: #000000">
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label for="pkg" class="col-md-12">基础包名</label>
                                     <div class="col-md-12">
                                         <input type="text"
-                                               placeholder="com.sankuai.meituan.waimai.service.dal.repository"
-                                               class="form-control form-control-line" name="pkg"
+                                               placeholder="示例：com.sankuai.meituan.waimai.service.dal.repository"
+                                               class="form-control form-control-line" name="pkg" style="color: #000000"
                                                id="pkgTxt">
                                     </div>
                                 </div>
@@ -171,7 +171,7 @@
                                     <label for="customizedModelName" class="col-md-12">自定义实体名</label>
                                     <div class="col-md-12">
                                         <input type="text"
-                                               placeholder="my_model"
+                                               placeholder="示例：my_model，使用下划线分词" style="color: #000000"
                                                class="form-control form-control-line" name="customizedModelName"
                                                id="customizedBizTxt">
                                     </div>
@@ -180,6 +180,7 @@
                                     <label for="workspacePath" class="col-md-12">代码文件路径</label>
                                     <div class="col-md-12">
                                         <input type="text" value="/Users/wangxiandui/Documents/gen-codes"
+                                               style="color: #000000"
                                                class="form-control form-control-line" name="workspacePath"
                                                id="workspaceTxt">
                                     </div>
@@ -187,7 +188,8 @@
                                 <div class="form-group">
                                     <label class="col-sm-12">目标语言</label>
                                     <div class="col-sm-12">
-                                        <select name="driveCodeType" class="form-control form-control-line">
+                                        <select name="driveCodeType" style="color: #000000"
+                                                class="form-control form-control-line">
                                             <option>Java</option>
                                         </select>
                                     </div>
@@ -195,7 +197,7 @@
                                 <div class="form-group">
                                     <label class="col-md-12">驱动语句（必填）</label>
                                     <div class="col-md-12">
-                                        <textarea id="driveCodeTxt" rows="15" name="driveCode"
+                                        <textarea id="driveCodeTxt" rows="15" name="driveCode" style="color: #000000"
                                                   class="form-control form-control-line"></textarea>
                                     </div>
                                 </div>
