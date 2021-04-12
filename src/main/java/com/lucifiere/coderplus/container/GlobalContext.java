@@ -1,18 +1,13 @@
 package com.lucifiere.coderplus.container;
 
 import cn.hutool.core.annotation.AnnotationUtil;
-import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.ReflectUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.log.StaticLog;
-import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.lucifiere.coderplus.common.ClassManager;
 import com.lucifiere.coderplus.common.GlobalConfig;
-import com.lucifiere.coderplus.group.spec.Group;
-import com.lucifiere.coderplus.group.spec.GroupSpec;
-import com.lucifiere.coderplus.group.spec.Groups;
 import com.lucifiere.coderplus.templates.spec.Template;
 import com.lucifiere.coderplus.templates.spec.TemplateSpec;
 import com.lucifiere.coderplus.templates.spec.Templates;
@@ -37,8 +32,6 @@ public class GlobalContext {
     private final Map<String, TemplateSpec> templateMap = Maps.newConcurrentMap();
 
     private final Map<String, ManagedBeanSpec> componentMap = Maps.newConcurrentMap();
-
-    private final Map<String, GroupSpec> groupMap = Maps.newConcurrentMap();
 
     public GlobalConfig getConfig() {
         return this.config;
@@ -68,18 +61,6 @@ public class GlobalContext {
         return templateMap.get(id);
     }
 
-    public GroupSpec getGroupById(String id) {
-        return groupMap.get(id);
-    }
-
-    public List<String> getTemplateIdsByGroupId(String groupId) {
-        GroupSpec groupSpec = getGroupById(groupId);
-        if (null == groupSpec || CollectionUtil.isEmpty(groupSpec.getTemplateIds())) {
-            return Lists.newArrayList();
-        }
-        return groupSpec.getTemplateIds();
-    }
-
     public Set<TemplateSpec> getAllTemplates() {
         return Sets.newHashSet(templateMap.values());
     }
@@ -98,7 +79,6 @@ public class GlobalContext {
             this.config = config;
             registerComponents();
             registerTemplates();
-            registerGroups();
             processGlobalContextAware();
             this.isInit.compareAndSet(false, true);
         } catch (Exception e) {
@@ -151,31 +131,7 @@ public class GlobalContext {
             }
         });
     }
-
-    private static final String GROUPS_EMBED = "com.dlin.group.embed";
-
-    private void registerGroups() {
-        String customizedTplPath = config.getGroupsConfigScanPath();
-        Set<Class<?>> groups = ClassManager.getClazzByPath(customizedTplPath, GROUPS_EMBED);
-        groups.parallelStream().forEach(clazz -> {
-            Groups gs = AnnotationUtil.getAnnotation(clazz, Groups.class);
-            if (gs != null) {
-                Object instance = ReflectUtil.newInstance(clazz);
-                Arrays.stream(clazz.getDeclaredMethods()).forEach(method -> {
-                    Group g = AnnotationUtil.getAnnotation(method, Group.class);
-                    if (null != g) {
-                        Object obj = ReflectUtil.invoke(instance, method);
-                        if (obj instanceof GroupSpec) {
-                            GroupSpec groupSpec = (GroupSpec) obj;
-                            groupSpec.setId(g.value());
-                            groupMap.put(groupSpec.getId(), groupSpec);
-                        }
-                    }
-                });
-            }
-        });
-    }
-
+    
     private void registerComponents() {
         Set<Class<?>> clazzSet = ClassManager.getCoderPlusClazz();
         clazzSet.forEach(clazz -> {
@@ -190,7 +146,6 @@ public class GlobalContext {
 
     private void clear() {
         templateMap.clear();
-        groupMap.clear();
         componentMap.clear();
     }
 

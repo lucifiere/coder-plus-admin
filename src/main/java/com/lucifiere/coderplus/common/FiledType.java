@@ -50,7 +50,8 @@ public class FiledType {
             STR_VARCHAR,
             STR_TEXT,
             LONG_TEXT,
-            BYTE_BLOB
+            BYTE_BLOB,
+            BOOL
     );
 
     private final String javaType;
