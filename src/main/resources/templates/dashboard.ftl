@@ -148,7 +148,8 @@
                     <div class="card">
                         <!-- Tab panes -->
                         <div class="card-body">
-                            <form class="form-horizontal form-material" method="post" action="/dashboard/download">
+                            <form class="form-horizontal form-material" method="post" onsubmit="generate();"
+                                  action="/dashboard/download" target="blockRefresh">
                                 <input type="hidden" value="${node.nodeType}" id="nodeType" name="nodeType">
                                 <div class="form-group">
                                     <label class="col-md-12" for="author">代码作者（必填）</label>
@@ -204,6 +205,7 @@
                                         <button class="btn btn-warning" type="submit">下载代码</button>
                                     </div>
                                 </div>
+                                <iframe src="" width="0" height="0" name="blockRefresh"></iframe>
                             </form>
                         </div>
                     </div>
@@ -298,28 +300,6 @@
                 } else {
                     alert(obj.msg)
                 }
-            }
-        })
-    }
-
-    function download() {
-        const req = {
-            "driveCode": $("#driveCodeTxt").val(),
-            "nodeType": $("#nodeType").val(),
-            "author": $("#authorTxt").val(),
-            "pkg": $("#pkgTxt").val(),
-            "workspacePath": $("#workspaceTxt").val(),
-            "customizedModelName": $("#customizedModelName").val(),
-        }
-        $.ajax({
-            contentType: "application/json",
-            url: "/dashboard/download",
-            type: "post",
-            async: false,
-            responseType: 'arraybuffer',
-            data: JSON.stringify(req),
-            success: function () {
-
             }
         })
     }

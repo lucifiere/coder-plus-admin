@@ -57,7 +57,7 @@ public class DashboardController {
     }
 
     @RequestMapping(value = "download", produces = MediaType.TEXT_PLAIN_VALUE + ";charset=utf-8")
-    public ResponseEntity<byte[]> downloadFile(CodeGenerateRequest setting, HttpServletRequest request) {
+    public Object downloadFile(CodeGenerateRequest setting, HttpServletRequest request) {
         try {
             Preconditions.checkArgument(StrUtil.isNotBlank(setting.getWorkspacePath()), "请输入代码文件路径~");
             Bootstrap bootstrap = coderGenerateService.createBootstrap(setting);
@@ -78,7 +78,7 @@ public class DashboardController {
             CodeGenerateResponse r = new CodeGenerateResponse();
             r.setMsg("执行失败！" + e.getMessage());
             r.setSuc(false);
-            return null;
+            return r;
         }
     }
 

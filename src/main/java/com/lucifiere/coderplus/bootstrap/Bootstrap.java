@@ -46,6 +46,7 @@ public abstract class Bootstrap {
             StaticLog.info("generate content success! check your file at " + context.calByComponent(config.getExporter(), Exporter::getOutputPath));
         } catch (Exception e) {
             StaticLog.error(e, "generate content failed! ");
+            throw e;
         }
     }
 
