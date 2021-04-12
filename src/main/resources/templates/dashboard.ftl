@@ -132,7 +132,6 @@
             <!-- ============================================================== -->
             <div class="row page-titles">
                 <div class="col-md-5 align-self-center">
-                    <input type="hidden" value="${node.nodeType}" id="nodeType">
                     <h3 class="text-themecolor">${node.text}</h3>
                 </div>
             </div>
@@ -149,44 +148,45 @@
                     <div class="card">
                         <!-- Tab panes -->
                         <div class="card-body">
-                            <form class="form-horizontal form-material">
+                            <form class="form-horizontal form-material" method="post" action="/dashboard/download">
+                                <input type="hidden" value="${node.nodeType}" id="nodeType" name="nodeType">
                                 <div class="form-group">
-                                    <label class="col-md-12">代码作者（必填）</label>
+                                    <label class="col-md-12" for="author">代码作者（必填）</label>
                                     <div class="col-md-12">
-                                        <input type="text" placeholder="XD.Wang" id="authorTxt"
+                                        <input type="text" placeholder="XD.Wang" id="authorTxt" name="author"
                                                class="form-control form-control-line">
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label for="biz-input" class="col-md-12">基础包名</label>
+                                    <label for="pkg" class="col-md-12">基础包名</label>
                                     <div class="col-md-12">
                                         <input type="text"
                                                placeholder="com.sankuai.meituan.waimai.service.dal.repository"
-                                               class="form-control form-control-line" name="biz-input"
+                                               class="form-control form-control-line" name="pkg"
                                                id="pkgTxt">
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label for="biz-input" class="col-md-12">自定义实体名</label>
+                                    <label for="customizedModelName" class="col-md-12">自定义实体名</label>
                                     <div class="col-md-12">
                                         <input type="text"
                                                placeholder="my_model"
-                                               class="form-control form-control-line" name="biz-input"
+                                               class="form-control form-control-line" name="customizedModelName"
                                                id="customizedBizTxt">
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label for="biz-input" class="col-md-12">代码文件路径</label>
+                                    <label for="workspacePath" class="col-md-12">代码文件路径</label>
                                     <div class="col-md-12">
                                         <input type="text" value="/Users/wangxiandui/Documents/gen-codes"
-                                               class="form-control form-control-line" name="workspace-path"
+                                               class="form-control form-control-line" name="workspacePath"
                                                id="workspaceTxt">
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="col-sm-12">目标语言</label>
                                     <div class="col-sm-12">
-                                        <select class="form-control form-control-line">
+                                        <select name="driveCodeType" class="form-control form-control-line">
                                             <option>Java</option>
                                         </select>
                                     </div>
@@ -194,14 +194,14 @@
                                 <div class="form-group">
                                     <label class="col-md-12">驱动语句（必填）</label>
                                     <div class="col-md-12">
-                                        <textarea id="driveCodeTxt" rows="15"
+                                        <textarea id="driveCodeTxt" rows="15" name="driveCode"
                                                   class="form-control form-control-line"></textarea>
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <div class="col-sm-12">
                                         <button class="btn btn-success" type="button" onclick="generate()">生成代码</button>
-                                        <button class="btn btn-warning" type="button" onclick="download()">下载代码</button>
+                                        <button class="btn btn-warning" type="submit">下载代码</button>
                                     </div>
                                 </div>
                             </form>
@@ -316,6 +316,7 @@
             url: "/dashboard/download",
             type: "post",
             async: false,
+            responseType: 'arraybuffer',
             data: JSON.stringify(req),
             success: function () {
 

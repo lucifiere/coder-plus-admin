@@ -13,6 +13,8 @@ import com.lucifiere.coderplus.render.views.SourceCodeView;
 import com.lucifiere.coderplus.utils.CodeStyle;
 import com.lucifiere.coderplus.utils.ExceptionUtils;
 
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -35,6 +37,7 @@ public class CodeExporter extends AbstractExporter {
         checkViewType(views);
         this.views = views;
         String outPath = getOutputPath();
+        FileUtil.del(getOutputPath());
         this.views.stream().map(view -> (SourceCodeView) view).forEach(ExceptionUtils.ioConsumer(view -> {
             if (StrUtil.isNotBlank(view.getFileSetting().getFileDir())) {
                 Path path = Paths.get(getOutputPath() + view.getFileSetting().getFileDir());
@@ -44,7 +47,7 @@ public class CodeExporter extends AbstractExporter {
             }
             FileAccessor.createFile(view.getContent(), outPath, createFilePath(view));
         }));
-        ZipUtil.zip(outPath);
+        ZipUtil.zip(outPath, StandardCharsets.UTF_8);
     }
 
     private void checkViewType(List<View> views) {

@@ -131,7 +131,7 @@ public class GlobalContext {
             }
         });
     }
-    
+
     private void registerComponents() {
         Set<Class<?>> clazzSet = ClassManager.getCoderPlusClazz();
         clazzSet.forEach(clazz -> {

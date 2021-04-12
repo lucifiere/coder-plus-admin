@@ -1,5 +1,6 @@
 package com.lucifiere.coderplusadmin.controller;
 
+import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.util.StrUtil;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
@@ -17,8 +18,6 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -57,8 +56,8 @@ public class DashboardController {
         return m;
     }
 
-    @PostMapping("download")
-    public Object downloadFile(@RequestBody CodeGenerateRequest setting, HttpServletRequest request) {
+    @RequestMapping(value = "download", produces = MediaType.TEXT_PLAIN_VALUE + ";charset=utf-8")
+    public ResponseEntity<byte[]> downloadFile(CodeGenerateRequest setting, HttpServletRequest request) {
         try {
             Preconditions.checkArgument(StrUtil.isNotBlank(setting.getWorkspacePath()), "请输入代码文件路径~");
             Bootstrap bootstrap = coderGenerateService.createBootstrap(setting);
@@ -71,16 +70,15 @@ public class DashboardController {
                     EmbedTemplates.MYBATIS_MAPPER));
             Resource resource = FileAccessor.loadFileResource(setting.getWorkspacePath() + "/" + "output.zip");
             String contentType = request.getServletContext().getMimeType(resource.getFile().getAbsolutePath());
-            contentType = "application/octet-stream";
             return ResponseEntity.ok()
                     .contentType(MediaType.parseMediaType(contentType))
-                    .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"")
-                    .body(resource);
+                    .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + resource.getFilename())
+                    .body(FileUtil.readBytes(resource.getFile()));
         } catch (Exception e) {
             CodeGenerateResponse r = new CodeGenerateResponse();
             r.setMsg("执行失败！" + e.getMessage());
             r.setSuc(false);
-            return r;
+            return null;
         }
     }
 
